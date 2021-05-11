@@ -25,30 +25,30 @@ class stock:
         self.b3sa3_data, self.b3sa3_md = ts.get_daily(symbol = ('B3SA3.SAO'), outputsize = 'compact')
         self.b3sa3_symbol = ts.get_symbol_search('B3SA3.SAO')
         
-        def buscaB3SA3(self):
-                   
-            conn = sqlite3.connect('stock.db')
-            self.b3sa3_data.to_sql('b3sa3', conn, if_exists='replace')  
-            
-            self.load_b3sa3 = pd.read_sql('SELECT * FROM b3sa3', conn) 
-            
-            print('DADOS CARREGADOS DE B3SA3:')
-            print(self.load_b3sa3['4. close'])
+    def buscaB3SA3(self):
+                
+        conn = sqlite3.connect('stock.db')
+        self.b3sa3_data.to_sql('b3sa3', conn, if_exists='replace')  
+        
+        self.load_b3sa3 = pd.read_sql('SELECT * FROM b3sa3', conn) 
+        
+        print('DADOS CARREGADOS DE B3SA3:')
+        print(self.load_b3sa3['4. close'])
 
     # BUSCANDO DADOS DE PETR4
     def  __init__(self):
         self.petr4_data, self.petr4_md = ts.get_daily(symbol = ('PETR4.SAO'), outputsize = 'compact')
         self.petr4_symbol = ts.get_symbol_search('PETR4.SAO')
         
-        def buscaPETR4(self):            
-            
-            conn = sqlite3.connect('stock.db')
-            self.petr4_data.to_sql('petr4', conn, if_exists='replace')
+    def buscaPETR4(self):            
+        
+        conn = sqlite3.connect('stock.db')
+        self.petr4_data.to_sql('petr4', conn, if_exists='replace')
 
-            self.load_petr4 = pd.read_sql('SELECT * FROM petr4', conn)  
+        self.load_petr4 = pd.read_sql('SELECT * FROM petr4', conn)  
 
-            print('DADOS CARREGADOS DE PETR4:')
-            print(self.load_petr4['4. close'])  
+        print('DADOS CARREGADOS DE PETR4:')
+        print(self.load_petr4['4. close'])  
 
 obj = stock()
 
