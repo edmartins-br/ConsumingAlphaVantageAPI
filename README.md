@@ -1,4 +1,4 @@
-# COSUMINDO A API DA ALPHA VANTAGE
+# CONSUMINDO A API DA ALPHA VANTAGE
 ## Linguagem: Python
 
 Alpha Vantage API
