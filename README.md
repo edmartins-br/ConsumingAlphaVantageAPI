@@ -8,6 +8,9 @@ Eduardo Machado Martins
 
 www.eduardommartins.wordpress.com
 
+https://www.linkedin.com/in/eduardommartins/
+
+
 ## ESTRUTURA DO PROJETO
 
 A chave foi adquirida no site da Alpha Vantage.
