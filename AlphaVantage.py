@@ -17,8 +17,6 @@ ALPHAVANTAGE_API_KEY = open('alphaVantageKey.txt').read()
 
 ts = TimeSeries(key = ALPHAVANTAGE_API_KEY, output_format='pandas')
 
-# BUSCANDO DADOS DE B3SA3...
-
 class Stock:
   def __init__(self, stock_name, stock_info):
     self.__stock_name = stock_name
@@ -30,15 +28,11 @@ class Stock:
 
     self.__data.to_sql(f'{stock_name}', self.conn, if_exists='replace') 
     self.__symbol.to_sql(f'{stock_info}', self.conn, if_exists='replace')
-    #print(self.__symbol)
-    # print(type(self.__symbol))
-      
+         
   def busca(self, _days):
     date = datetime.datetime.now() - datetime.timedelta(days=_days)
     date_string = date.strftime('%Y-%m-%d')    
     
-    #cursos.execute(f'INSERT INTO {self.__stock_name} (date, 1. open, 2. high, 3. low, 4. close, 5. volume) VALUES(?,?,?,?,?)',())    
-
     query = pd.read_sql(f'SELECT * FROM { self.__stock_name } WHERE date >= "{ date_string }"', self.conn) 
     df = pd.DataFrame(query, columns=['date','4. close'])
 
@@ -47,8 +41,7 @@ class Stock:
 
     print(f'DADOS CARREGADOS DE { self.__stock_name }:')
     print('_'*50)
-    # print(type(df))
-    
+        
     print('='*50)
     print(dfs)
 
@@ -58,11 +51,11 @@ class Stock:
 
     if (self.__stock_name == 'B3SA3' or self.__stock_name == 'PETR4'):
 
-      plt.title('Daily Time Series for the {self.__stock_name} stock (close)')
+      plt.title('Daily Time Series for the stock (close)')
 
       plt.plot(df['4. close'])      
 
-      plt.xlabel("YEAR")
+      plt.xlabel("DAYS")
       plt.ylabel("POINTS")
 
       plt.plot([], label = self.__stock_name)
