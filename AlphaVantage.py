@@ -1,35 +1,37 @@
 #! /usr/bin/python3
 
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import sqlite3
 from alpha_vantage.timeseries import TimeSeries
 import matplotlib
-import json
 import datetime
 
 matplotlib.rcParams['figure.figsize'] = (16, 8)
 
 print('CARREGANDO DADOS...')
+print('_'*50)
 
 # BUSCA A CHAVE DA API ALPHA VANTAGE
-ALPHAVANTAGE_API_KEY = 'QKWVUQ6IISGPG3F8'
+ALPHAVANTAGE_API_KEY = open('alphaVantageKey.txt').read()
 
 ts = TimeSeries(key = ALPHAVANTAGE_API_KEY, output_format='pandas')
 
 # BUSCANDO DADOS DE B3SA3...
 
 class Stock:
-  def __init__(self, stock_name):
+  def __init__(self, stock_name, stock_info):
     self.__stock_name = stock_name
+    self.__stock_info = stock_info
     self.__data, self.__metaData = ts.get_daily(symbol = (f'{ stock_name }.SAO'), outputsize = 'compact')
     self.__symbol, self.__SymbolMetaData = ts.get_symbol_search(f'{ stock_name }.SAO')
 
     self.conn = sqlite3.connect('stock.db')
+
     self.__data.to_sql(f'{stock_name}', self.conn, if_exists='replace') 
-    #self.__symbol.to_sql(f'{self.__symbol}', self.conn, if_exists='replace') 
-    print(self.__symbol)
+    self.__symbol.to_sql(f'{stock_info}', self.conn, if_exists='replace')
+    #print(self.__symbol)
+    # print(type(self.__symbol))
       
   def busca(self, _days):
     date = datetime.datetime.now() - datetime.timedelta(days=_days)
@@ -40,33 +42,40 @@ class Stock:
     query = pd.read_sql(f'SELECT * FROM { self.__stock_name } WHERE date >= "{ date_string }"', self.conn) 
     df = pd.DataFrame(query, columns=['date','4. close'])
 
-    # querySymbol = pd.read_sql(f'SELECT * FROM { self.__stock_name }', self.conn) 
-    # dfs = pd.DataFrame(querySymbol, columns=['date','1. symbol', '2. name'])
+    querySymbol = pd.read_sql(f'SELECT * FROM { self.__stock_info }', self.conn) 
+    dfs = pd.DataFrame(querySymbol, columns=['1. symbol', '2. name'])
 
     print(f'DADOS CARREGADOS DE { self.__stock_name }:')
-    print(df)
-    #print(dfs)
+    print('_'*50)
+    # print(type(df))
+    
+    print('='*50)
+    print(dfs)
 
-    return df
-    #return dfs
+    print('='*50)
+    print(df)    
+    print('='*50)
 
-b3sa3_stock = Stock('B3SA3')
-petr4_stock = Stock('PETR4')
+    if (self.__stock_name == 'B3SA3' or self.__stock_name == 'PETR4'):
+
+      plt.title('Daily Time Series for the {self.__stock_name} stock (close)')
+
+      plt.plot(df['4. close'])      
+
+      plt.xlabel("YEAR")
+      plt.ylabel("POINTS")
+
+      plt.plot([], label = self.__stock_name)
+      plt.legend()      
+
+      plt.show()    
+
+    return df, dfs
+    
+
+b3sa3_stock = Stock('B3SA3', 'B3SA3_info')
+petr4_stock = Stock('PETR4', 'PETR4_info')
 
 b3sa3_data = b3sa3_stock.busca(7) # BUSCA POR DADOS DA ÚLTIMA SEMANA
 petr4_data = petr4_stock.busca(7) # BUSCA POR DADOS DA ÚLTIMA SEMANA
 
-plt.title('Daily Time Series for the B3SA3 stock (close)')
-plt.plot(b3sa3_data['4. close'])
-plt.plot(petr4_data['4. close'])
-
-plt.xlabel("YEAR")
-plt.ylabel("POINTS")
-
-plt.plot([], label='B3SA3')
-plt.legend()
-
-plt.plot([], label='PETR4')
-plt.legend()
-
-plt.show()
