@@ -120,7 +120,7 @@ GitHub: https://github.com/edmartins-br/ConsumingAlphaVantageAPI
 ==================================================
 
 
-Para ver os gráfico, acesse a pasta "Documentos" ou "JupyterNotebook"
+Para ver os gráficos, acesse a pasta "Documentos" ou "JupyterNotebook"
 
 
 
